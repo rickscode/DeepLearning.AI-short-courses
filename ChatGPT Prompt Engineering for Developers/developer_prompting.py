@@ -234,3 +234,176 @@ print(response)
 # "french_summary": "Deux frères et sœurs, Jack et Jill, partent en quête d'eau d'un puits au sommet d'une colline, mais ils tombent tous les deux et retournent chez eux légèrement meurtris mais avec leur esprit d'aventure intact.",
 # "num_names": 2
 # }
+
+# example 2
+prompt_2 = f"""
+Your task is to perform the following actions: 
+1 - Summarize the following text delimited by 
+  <> with 1 sentence.
+2 - Translate the summary into French.
+3 - List each name in the French summary.
+4 - Output a json object that contains the 
+  following keys: french_summary, num_names.
+
+Use the following format:
+Text: <text to summarize>
+Summary: <summary>
+Translation: <summary translation>
+Names: <list of names in Italian summary>
+Output JSON: <json with summary and num_names>
+
+Text: <{text}>
+"""
+response = get_completion(prompt_2)
+print("\nCompletion for prompt 2:")
+print(response)
+
+# Response:
+
+# Completion for prompt 2:
+# Summary: Jack and Jill go on a quest to fetch water, but misfortune strikes and they tumble down the hill, returning home slightly battered but with their adventurous spirits undimmed. 
+# Translation: Jack et Jill partent en quête d'eau, mais un malheur frappe et ils tombent de la colline, rentrant chez eux légèrement meurtris mais avec leurs esprits aventureux intacts.
+# Names: Jack, Jill
+# Output JSON: {
+#     "french_summary": "Jack et Jill partent en quête d'eau, mais un malheur frappe et ils tombent de la colline, 
+#     rentrant chez eux légèrement meurtris mais avec leurs esprits aventureux intacts.", "num_names": 2
+#     }
+
+
+### Instruct the model to work out its own solution before rushing to a conclusion
+
+prompt = f"""
+Determine if the student's solution is correct or not.
+
+Question:
+I'm building a solar power installation and I need \
+ help working out the financials. 
+- Land costs $100 / square foot
+- I can buy solar panels for $250 / square foot
+- I negotiated a contract for maintenance that will cost \ 
+me a flat $100k per year, and an additional $10 / square \
+foot
+What is the total cost for the first year of operations 
+as a function of the number of square feet.
+
+Student's Solution:
+Let x be the size of the installation in square feet.
+Costs:
+1. Land cost: 100x
+2. Solar panel cost: 250x
+3. Maintenance cost: 100,000 + 100x
+Total cost: 100x + 250x + 100,000 + 100x = 450x + 100,000
+"""
+response = get_completion(prompt)
+print(response)
+
+# Response:
+
+# The student's solution is correct. 
+
+## (Actually incorrect) we can fix this by asking the model to find its own solution first 
+
+prompt = f"""
+Your task is to determine if the student's solution \
+is correct or not.
+To solve the problem do the following:
+- First, work out your own solution to the problem. 
+- Then compare your solution to the student's solution \ 
+and evaluate if the student's solution is correct or not. 
+Don't decide if the student's solution is correct until 
+you have done the problem yourself.
+
+Use the following format:
+Question:
+```
+question here
+```
+Student's solution:
+```
+student's solution here
+```
+Actual solution:
+```
+steps to work out the solution and your solution here
+```
+Is the student's solution the same as actual solution \
+just calculated:
+```
+yes or no
+```
+Student grade:
+```
+correct or incorrect
+```
+
+Question:
+```
+I'm building a solar power installation and I need help \
+working out the financials. 
+- Land costs $100 / square foot
+- I can buy solar panels for $250 / square foot
+- I negotiated a contract for maintenance that will cost \
+me a flat $100k per year, and an additional $10 / square \
+foot
+What is the total cost for the first year of operations \
+as a function of the number of square feet.
+``` 
+Student's solution:
+```
+Let x be the size of the installation in square feet.
+Costs:
+1. Land cost: 100x
+2. Solar panel cost: 250x
+3. Maintenance cost: 100,000 + 100x
+Total cost: 100x + 250x + 100,000 + 100x = 450x + 100,000
+```
+Actual solution:
+"""
+response = get_completion(prompt)
+print(response)
+
+# Response:
+
+# Let x be the size of the installation in square feet.
+
+# Costs:
+# 1. Land cost: 100x
+# 2. Solar panel cost: 250x
+# 3. Maintenance cost: 100,000 + 10x
+
+# Total cost: 100x + 250x + 100,000 + 10x = 360x + 100,000
+
+# Is the student's solution the same as actual solution just calculated:
+# No
+
+# Student grade:
+# Incorrect
+
+### Model Limitations: Hallucinations
+
+# Boie is a real company, the product name is not real.
+
+prompt = f"""
+Tell me about AeroGlide UltraSlim Smart Toothbrush by Boie
+"""
+response = get_completion(prompt)
+print(response)
+
+# Response:
+
+# The AeroGlide UltraSlim Smart Toothbrush by Boie is a high-tech toothbrush that uses advanced sonic technology to provide a deep and thorough clean. 
+# It features a slim and sleek design that makes it easy to hold and maneuver, and it comes with a range of smart features that help you optimize your brushing 
+# routine.
+
+# One of the key features of the AeroGlide UltraSlim Smart Toothbrush is its advanced sonic technology, 
+# which uses high-frequency vibrations to break up plaque and bacteria on your teeth and gums. 
+# This technology is highly effective at removing even the toughest stains and buildup, leaving your teeth feeling clean and fresh.
+
+# In addition to its sonic technology, the AeroGlide UltraSlim Smart Toothbrush also comes with a range of smart features 
+# that help you optimize your brushing routine. These include a built-in timer that ensures you brush for the recommended two minutes, 
+# as well as a pressure sensor that alerts you if you're brushing too hard.
+
+# Overall, the AeroGlide UltraSlim Smart Toothbrush by Boie is a highly advanced and effective toothbrush that is perfect for anyone looking 
+# to take their oral hygiene to the next level. With its advanced sonic technology and smart features, it provides a deep and thorough clean 
+# that leaves your teeth feeling fresh and healthy.
+
