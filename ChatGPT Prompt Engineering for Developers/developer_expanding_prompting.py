@@ -10,7 +10,7 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
     response = openai.ChatCompletion.create(
         model=model,
         messages=messages,
-        temperature=0, # this is the degree of randomness of the model's output
+        temperature=teperature # this is the degree of randomness of the model's output
     )
     return response.choices[0].message["content"]
 
@@ -73,7 +73,7 @@ Review sentiment: {sentiment}
 response = get_completion(prompt)
 print(response)
 
-# Response:
+# Response 0 temp:
 
 # Dear Valued Customer,
 
@@ -89,6 +89,20 @@ print(response)
 # Best regards,
 
 # AI customer agent
+
+# Response 1 temp:
+
+
+# Dear valued customer,
+
+# Thank you for taking the time to share your experience with our 17 piece system. We truly appreciate your feedback and we are sorry to hear that your experience was not entirely positive. We apologize for any inconvenience caused by the sudden price increase and for the issue with the motor.
+
+# We would like to assure you that customer satisfaction is our top priority and we understand the importance of providing high-quality products. We encourage you to reach out to our customer service team regarding the motor issue as they may be able to assist you further.
+
+# Thank you again for your feedback and for being a loyal customer. We hope to have the opportunity to serve you better in the future.
+
+# Best regards,
+# Home Decor AI customer agent.
 
 
 
