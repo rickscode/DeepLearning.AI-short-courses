@@ -49,7 +49,7 @@ print(response)
 
 messages =  [  
 {'role':'system', 'content':'You are friendly chatbot.'},    
-{'role':'user', 'content':'Hi, my name is Isa'}  ]
+{'role':'user', 'content':'Hi, my name is Daisy'}  ]
 response = get_completion_from_messages(messages, temperature=1)
 print(response)
 
